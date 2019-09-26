@@ -1,0 +1,137 @@
+variables:
+  IMAGE_LAST_SUCCESS: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
+  IMAGE_COMMIT: $CI_REGISTRY_IMAGE/commit:$CI_COMMIT_SHA
+  IMAGE_PUSH: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
+
+stages:
+  - debug
+  - pre_build
+  - build
+  - post_build
+  - pre_deliver
+  - deliver
+  - post_deliver
+  - pre_deploy
+  - deploy
+  - post_deploy
+
+# debug:
+#   stage: debug
+#   services:
+#     - docker:stable-dind
+
+#   image: docker:stable
+#   script:
+#     - env
+#     - docker info
+
+
+# check config files:
+#   stage: pre_build
+#   image:
+#     name: prom/prometheus:$PROMETHEUS_VERSION
+#     entrypoint: [""]
+#   script:
+#     - promtool check config prometheus.yml
+
+.docker_login:
+  image: docker:stable
+  services:
+    - docker:stable-dind
+  tags:
+    - docker
+  before_script:
+    - docker --version
+    # - docker info | grep ersion
+    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+
+build_image:
+  stage: build
+  # image: docker:stable
+  # services:
+  #   - docker:stable-dind
+  # only:
+  #   refs:
+  #     - development
+  extends: .docker_login
+  script:
+    # # Skip if commit image already exists
+    # - docker image list $IMAGE_COMMIT && exit
+    - docker pull $IMAGE_LAST_SUCCESS || true
+    - docker build  --cache-from $IMAGE_LAST_SUCCESS --tag $IMAGE_COMMIT .
+    - docker push $IMAGE_COMMIT
+
+# skip image build:
+#   stage: build
+#   # image: docker:stable
+#   # except:
+#   #   refs:
+#   #     - development
+#   extends: .docker_login
+#   script:
+#     - docker pull $IMAGE_COMMIT
+#     - docker image list $IMAGE_COMMIT
+
+verify_image:
+  stage: post_build
+  image:
+    name: $IMAGE_COMMIT
+    entrypoint: [""]
+  script:
+    - ls -l
+
+.docker_push_image:
+  stage: deliver
+  # image: docker:stable
+  # tags:
+  #   - dind
+  # services:
+  #   - docker:stable-dind
+  extends: .docker_login
+  script:
+    - docker pull $IMAGE_COMMIT
+    - docker tag $IMAGE_COMMIT  $IMAGE_PUSH
+    - docker push $IMAGE_PUSH
+
+latest_image:
+  stage: deliver
+  # image: docker:stable
+  # tags:
+  #   - dind
+  # services:
+  #   - docker:stable-dind
+  extends: .docker_push_image
+  # script:
+  #   - docker image list $IMAGE_COMMIT
+
+deploy_master-latest_image:
+  stage: deliver
+  # image: docker:stable
+  variables:
+    IMAGE_PUSH: $CI_REGISTRY_IMAGE:latest
+  # tags:
+  #   - dind
+  only:
+    refs:
+      - master
+  # services:
+  #   - docker:stable-dind
+  extends: .docker_push_image
+  # script:
+  #   - docker image list $IMAGE_COMMIT
+
+deploy_stable_image:
+  stage: deliver
+  # image: docker:stable
+  variables:
+    IMAGE_PUSH: $CI_REGISTRY_IMAGE:stable
+  # tags:
+  #   - dind
+  only:
+    refs:
+      - stable
+  # services:
+  #   - docker:stable-dind
+  extends: .docker_push_image
+  # script:
+  #   - docker image list $IMAGE_COMMIT
