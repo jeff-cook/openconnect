@@ -3,10 +3,6 @@
 This is a Docker image to run OpenConnect.
 <https://www.infradead.org/openconnect/index.html>
 
-## alpine:edge
-
-`alpine:edge` was chosen for the base image, because at the time `openconnect` was only a package for `edge`.
-
 <https://www.infradead.org/openconnect/nonroot.html> has instructions if you want to run it without root access.
 
 ## Configuration
