@@ -22,7 +22,7 @@ debug:
 
   image: docker:stable
   script:
-    - env | sort
+    - env
     - docker info
 
 
@@ -36,6 +36,8 @@ debug:
 
 .docker_login:
   image: docker:stable
+  services:
+    - docker:stable-dind
   before_script:
     - docker --version
     # - docker info | grep ersion
