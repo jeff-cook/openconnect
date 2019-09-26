@@ -15,6 +15,14 @@ stages:
   - deploy
   - post_deploy
 
+build_image:
+  stage: debug
+  image: docker:stable
+  script:
+    - env | sort
+    - docker info
+
+
 # check config files:
 #   stage: pre_build
 #   image:
