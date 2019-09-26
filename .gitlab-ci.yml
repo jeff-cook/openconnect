@@ -15,7 +15,7 @@ stages:
   - deploy
   - post_deploy
 
-build_image:
+debug:
   stage: debug
   image: docker:stable
   script:
