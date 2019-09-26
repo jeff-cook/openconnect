@@ -17,6 +17,9 @@ stages:
 
 debug:
   stage: debug
+  services:
+    - docker:stable-dind
+
   image: docker:stable
   script:
     - env | sort
