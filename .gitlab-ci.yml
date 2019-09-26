@@ -50,9 +50,9 @@ build_image:
     - dind
   services:
     - docker:stable-dind
-  only:
-    refs:
-      - development
+  # only:
+  #   refs:
+  #     - development
   extends: .docker_login
   script:
     # # Skip if commit image already exists
@@ -61,16 +61,16 @@ build_image:
     - docker build  --cache-from $IMAGE_LAST_SUCCESS --tag $IMAGE_COMMIT .
     - docker push $IMAGE_COMMIT
 
-skip image build:
-  stage: build
-  # image: docker:stable
-  except:
-    refs:
-      - development
-  extends: .docker_login
-  script:
-    - docker pull $IMAGE_COMMIT
-    - docker image list $IMAGE_COMMIT
+# skip image build:
+#   stage: build
+#   # image: docker:stable
+#   # except:
+#   #   refs:
+#   #     - development
+#   extends: .docker_login
+#   script:
+#     - docker pull $IMAGE_COMMIT
+#     - docker image list $IMAGE_COMMIT
 
 verify_image:
   stage: post_build
