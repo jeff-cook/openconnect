@@ -1,7 +1,7 @@
 variables:
-  IMAGE_LAST_SUCCESS: $CI_REGISTRY_IMAGE/commit:latest
-  IMAGE_COMMIT: $CI_REGISTRY_IMAGE/commit:$CI_COMMIT_SHA
-  IMAGE_PUSH: $CI_REGISTRY_IMAGE/commit:latest
+  IMAGE_LAST_SUCCESS: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
+  IMAGE_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+  IMAGE_PUSH: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
 
 stages:
   - debug
@@ -38,6 +38,8 @@ debug:
   image: docker:stable
   services:
     - docker:stable-dind
+  tags:
+    - docker
   before_script:
     - docker --version
     # - docker info | grep ersion
@@ -46,10 +48,8 @@ debug:
 build_image:
   stage: build
   # image: docker:stable
-  tags:
-    - dind
-  services:
-    - docker:stable-dind
+  # services:
+  #   - docker:stable-dind
   # only:
   #   refs:
   #     - development
@@ -83,10 +83,10 @@ verify_image:
 .docker_push_image:
   stage: deliver
   # image: docker:stable
-  tags:
-    - dind
-  services:
-    - docker:stable-dind
+  # tags:
+  #   - dind
+  # services:
+  #   - docker:stable-dind
   extends: .docker_login
   script:
     - docker pull $IMAGE_COMMIT
@@ -96,10 +96,10 @@ verify_image:
 latest_image:
   stage: deliver
   # image: docker:stable
-  tags:
-    - dind
-  services:
-    - docker:stable-dind
+  # tags:
+  #   - dind
+  # services:
+  #   - docker:stable-dind
   extends: .docker_push_image
   # script:
   #   - docker image list $IMAGE_COMMIT
@@ -109,13 +109,13 @@ deploy_master-latest_image:
   # image: docker:stable
   variables:
     IMAGE_PUSH: $CI_REGISTRY_IMAGE:latest
-  tags:
-    - dind
+  # tags:
+  #   - dind
   only:
     refs:
       - master
-  services:
-    - docker:stable-dind
+  # services:
+  #   - docker:stable-dind
   extends: .docker_push_image
   # script:
   #   - docker image list $IMAGE_COMMIT
@@ -125,13 +125,13 @@ deploy_stable_image:
   # image: docker:stable
   variables:
     IMAGE_PUSH: $CI_REGISTRY_IMAGE:stable
-  tags:
-    - dind
+  # tags:
+  #   - dind
   only:
     refs:
       - stable
-  services:
-    - docker:stable-dind
+  # services:
+  #   - docker:stable-dind
   extends: .docker_push_image
   # script:
   #   - docker image list $IMAGE_COMMIT
