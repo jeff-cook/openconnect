@@ -1,6 +1,6 @@
 variables:
   IMAGE_LAST_SUCCESS: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
-  IMAGE_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+  IMAGE_COMMIT: $CI_REGISTRY_IMAGE/commit:$CI_COMMIT_SHA
   IMAGE_PUSH: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
 
 stages:
@@ -15,15 +15,15 @@ stages:
   - deploy
   - post_deploy
 
-debug:
-  stage: debug
-  services:
-    - docker:stable-dind
+# debug:
+#   stage: debug
+#   services:
+#     - docker:stable-dind
 
-  image: docker:stable
-  script:
-    - env
-    - docker info
+#   image: docker:stable
+#   script:
+#     - env
+#     - docker info
 
 
 # check config files:
