@@ -27,7 +27,7 @@ stages:
   image: docker:stable
   before_script:
     - docker --version
-    - docker info | grep ersion
+    # - docker info | grep ersion
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
 
 build_image:
