@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  vpn:
+    image: registry.gitlab.com/jeffcook/openconnect:latest
+    restart: 'unless-stopped'
+    volumes:
+      - ./openconnect.conf:/etc/openconnect/openconnect.conf:ro
+      - ./vpn_password:/secrets/vpn_password:ro
+    environment:
+      - OPENCONNECT_PROTOCOL=anyconnect
+      - OPENCONNECT_SERVER=${VPN_URL}
+      - OPENCONNECT_USER=${VPN_USER}
+      - OPENCONNECT_AUTHGROUP=${VPN_AUTHGROUP}
+      - OPENCONNECT_SERVERCERT=${VPN_SERVERCERT}
+      - OPENCONNECT_PASSWORD_FILE=/secrets/vpn_password
+      - OPENCONNECT_TIMESTAMP=true
+      - OPENCONNECT_VERBOSE=false
+      - OPENCONNECT_NON_INTER=true
+      - OPENCONNECT_NO_DTLS=true
+    privileged: yes
+    cap_add:
+      - NET_ADMIN
+    user: root
