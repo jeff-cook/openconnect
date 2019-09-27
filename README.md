@@ -2,6 +2,9 @@
 
 This is a Docker image to run OpenConnect.
 <https://www.infradead.org/openconnect/index.html>
+
+> OpenConnect is an SSL VPN client initially created to support Cisco's AnyConnect SSL VPN. It has since been ported to support the Juniper SSL VPN (which is now known as Pulse Connect Secure), and to the Palo Alto Networks GlobalProtect SSL VPN.
+
 <https://www.infradead.org/openconnect/nonroot.html> has instructions if you want to run it without root access.
 
 ## Docker Image
