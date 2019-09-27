@@ -2,8 +2,11 @@
 
 This is a Docker image to run OpenConnect.
 <https://www.infradead.org/openconnect/index.html>
-
 <https://www.infradead.org/openconnect/nonroot.html> has instructions if you want to run it without root access.
+
+## Docker Image
+
+To use the pre-made Docker image use `registry.gitlab.com/jeffcook/openconnect:latest`.
 
 ## Configuration
 
