@@ -31,6 +31,7 @@ anchore inline_scan:
       alias: anchore-engine
       command: ["start"]
   script:
+    - yum install -y docker
     - docker pull $IMAGE_NAME
     - inline-scan a -s -- -r -t 500 "$IMAGE_NAME"
   artifacts:
