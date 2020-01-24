@@ -21,9 +21,7 @@ anchore inline_scan:
   stage: debug
   variables:
     IMAGE_NAME: $IMAGE_LAST_SUCCESS
-  image: docker:stable
-  services:
-    - docker:stable-dind
+  extends: .docker_login
   script:
     - docker pull $IMAGE_NAME
     - apk add bash curl 
