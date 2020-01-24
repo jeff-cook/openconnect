@@ -25,6 +25,7 @@ anchore inline_scan:
   services:
     - docker:stable-dind
   script:
+    - docker pull $IMAGE_NAME
     - apk add bash curl 
     - curl -s https://ci-tools.anchore.io/inline_scan-v0.3.3 | bash -s -- -r -t 500 "$IMAGE_NAME"    
   artifacts:
