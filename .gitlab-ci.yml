@@ -20,7 +20,7 @@ stages:
 anchore inline_scan:
   stage: debug
   variables:
-    IMAGE_NAME: $CI_REGISTRY_IMAGE:latest
+    IMAGE_NAME: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
   extends: .docker_login
   script:
     - docker pull $IMAGE_NAME
