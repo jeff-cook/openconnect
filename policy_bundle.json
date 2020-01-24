@@ -90,7 +90,7 @@
                     "trigger": "exposed_ports"
                 },
                 {
-                    "action": "WARN",
+                    "action": "STOP",
                     "gate": "dockerfile",
                     "id": "312d9e41-1c05-4e2f-ad89-b7d34b0855bb",
                     "params": [
