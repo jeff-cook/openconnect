@@ -19,7 +19,6 @@ stages:
 
 anchore inline_scan:
   stage: debug
-  extends: .docker_login
   variables:
     ANCHORE_CLI_URL: "http://anchore-engine:8228/v1"
     GIT_STRATEGY: none
@@ -31,7 +30,8 @@ anchore inline_scan:
       alias: anchore-engine
       command: ["start"]
   script:
-    - yum install -y docker
+    - yum install -y docker-ce
+    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker pull $IMAGE_NAME
     - inline-scan a -s -- -r -t 500 "$IMAGE_NAME"
   artifacts:
