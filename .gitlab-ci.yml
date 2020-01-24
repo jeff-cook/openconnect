@@ -92,9 +92,9 @@ container_scan_service:
     command: ["start"]
   
   script:
+  - source /opt/rh/rh-python36/enable
   - anchore-cli system wait
   - anchore-cli registry add "$CI_REGISTRY" gitlab-ci-token "$CI_JOB_TOKEN" --skip-validate 
-  - echo $IMAGE_COMMIT
   - anchore_ci_tools.py -a -r --timeout 500 --image $IMAGE_COMMIT
 
   artifacts:
