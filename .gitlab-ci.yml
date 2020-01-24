@@ -18,14 +18,14 @@ stages:
 
 
 anchore inline_scan:
-  stage: debug
+  stage: post_build
   variables:
-    IMAGE_NAME: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
+    IMAGE_NAME: $CI_REGISTRY_IMAGE/commit:$CI_COMMIT_SHA
   extends: .docker_login
   script:
     - docker pull $IMAGE_NAME
     - apk add bash curl 
-    - curl -s https://ci-tools.anchore.io/inline_scan-v0.6.0 | bash -s -- -r -f false -t 500 -b ./policy_bundle.json "$IMAGE_NAME"    
+    - curl -s https://ci-tools.anchore.io/inline_scan-v0.6.0 | bash -s -- -r -t 500 -b ./policy_bundle.json "$IMAGE_NAME"    
   artifacts:
     when: always  
     name: ${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}
