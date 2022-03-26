@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:focal
 
 LABEL openconnect.documantation="https://www.infradead.org/openconnect/index.html"
 
