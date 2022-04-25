@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:jammy
 
 LABEL openconnect.documantation="https://www.infradead.org/openconnect/index.html"
 
